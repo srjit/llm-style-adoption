@@ -1,34 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8" />
+  <head>
+    <meta charset="UTF-8" />
     {% load static %}
     {% include "includes.html" %}
-  <title>Example: Multiple</title>
-</head>
+    <title>Example: Multiple</title>
 
-<body>
+<script>
 
-  <div id="yseditor">
-    <h1>Heading</h1>
-    <p>Write text here...</p>
-  </div>
-  <br/>
-  
-  <script>
-    var myEditor = new ysEditor();
-    var otherEditor = new ysEditor({
-      toolbar: [
-        "undo", "redo", "bold", "italic", "underline",
-        "left", "center", "right"
-      ],
-      wrapper: "#othereditor",
-      bottom: true,
-      footer: false
-    });
+window.onload = function () {  
+document.addEventListener('keyup', event => {
+  if (event.code === 'Space') {
+     elm = document.getElementById('yseditor').textContent
+     textarray = elm.split("X2X2CF")
 
+$.ajax({
+  url: '/notes/recommend/',
+  type: 'POST',
+  dataType: 'json',
+  data: {
+    'text': elm,
+  },
+  success: function(response) {
+  console.log(response)
+},
+  error: function(error) {
+  }
+});
+
+  }
+
+
+
+})}
   </script>
-</body>
+  </head>
+
+  <body>
+
+    <div id="yseditor">
+      <h1>Heading</h1>
+      <p>Write text here...</p>
+    </div>
+    
+    <script>
+      var myEditor = new ysEditor();
+    </script>
+  </body>
 
 </html>
