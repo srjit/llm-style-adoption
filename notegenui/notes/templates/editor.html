@@ -5,35 +5,46 @@
     <meta charset="UTF-8" />
     {% load static %}
     {% include "includes.html" %}
-    <title>Example: Multiple</title>
+    <title>Note Generator</title>
 
 <script>
 
-window.onload = function () {  
-document.addEventListener('keyup', event => {
-  if (event.code === 'Space') {
-     elm = document.getElementById('yseditor').textContent
-     textarray = elm.split("X2X2CF")
+  window.onload = function () {  
+      document.addEventListener('keyup', event => {
+          if (event.code === 'Space') {
+              res = document.getElementById("result");
+              res.innerHTML = '';
 
-$.ajax({
-  url: '/notes/recommend/',
-  type: 'POST',
-  dataType: 'json',
-  data: {
-    'text': elm,
-  },
-  success: function(response) {
-  console.log(response)
-},
-  error: function(error) {
+              elm = document.getElementById('yseditor').textContent
+              textarray = elm.split("X2X2CF")
+
+              $.ajax({
+                  url: '/notes/recommend/',
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                      'text': elm,
+                  },
+                  success: function(response) {
+                      // console.log(response)
+                      showResults(response.suggestions);
+                  },
+                  error: function(error) {
+                  }
+              });
+          }
+      })
+
+      function showResults(suggestions) {
+          res = document.getElementById("result");
+          res.innerHTML = '';
+          let list = '';
+          for (i=0; i< suggestions.length; i++) {
+              list += '<li>' + suggestions[i] + '</li>';
+          }
+          res.innerHTML = '<ul>' + list + '</ul>';
+      }
   }
-});
-
-  }
-
-
-
-})}
   </script>
   </head>
 
@@ -41,7 +52,7 @@ $.ajax({
 
     <div id="yseditor">
       <h1>Heading</h1>
-      <p>Write text here...</p>
+      <p>Write text here...<div id="result"></div></p>
     </div>
     
     <script>
