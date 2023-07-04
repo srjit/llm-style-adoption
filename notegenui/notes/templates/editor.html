@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+    {% load static %}
+    {% include "includes.html" %}
+  <title>Example: Multiple</title>
+</head>
+
+<body>
+
+  <div id="yseditor">
+    <h1>Heading</h1>
+    <p>Write text here...</p>
+  </div>
+  <br/>
+  
+  <script>
+    var myEditor = new ysEditor();
+    var otherEditor = new ysEditor({
+      toolbar: [
+        "undo", "redo", "bold", "italic", "underline",
+        "left", "center", "right"
+      ],
+      wrapper: "#othereditor",
+      bottom: true,
+      footer: false
+    });
+
+  </script>
+</body>
+
+</html>
