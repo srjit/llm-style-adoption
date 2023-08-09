@@ -7,12 +7,8 @@ import config
 import utils
 
 import pandas as pd
-import seaborn as sns
 import numpy as np
 import random
-
-import matplotlib.pyplot as plt
-
 import torch
 from torch.utils.data import random_split, RandomSampler, SequentialSampler
 torch.manual_seed(42)

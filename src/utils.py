@@ -1,5 +1,7 @@
 import time
 import pandas as pd
+import matplotlib.pyplot as plt
+import viz
 
 import torch
 from torch.utils.data import DataLoader, \
@@ -74,11 +76,38 @@ def get_configuration_and_model():
 
 def format_time(elapsed):
     return str(datetime.timedelta(seconds=int(round((elapsed)))))
+
+
+def plot_training_status(stats, save_folder):
+
+    epochs = list(range(len(stats)))
+    
+    # Plot the learning curve.
+    f, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(8, 5))
+    viz.plot(epochs,
+             stats['Training Loss'],
+             ax=ax1,
+             ls="g-o",
+             label="Training")
+    viz.plot(epochs,
+             stats['Valid. Loss'], ax=ax1,
+             xlabel="Epoch",
+             ylabel="Loss",
+             ls='b-o',
+             label="Validation")
+
+    # Label the plot.
+    plt.legend()
+
+    graphs_root_folder = "../plots"
+    fname = datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S')
+    savepath = os.path.join(graphs_root_folder,  fname + ".png")
+    plt.savefig(savepath)
     
 
 def retrain(model, dataset, validate=True, device='cpu'):
 
-    epochs = 5
+    epochs = 2
     learning_rate = 5e-4
     warmup_steps = 1e2
     epsilon = 1e-8
@@ -236,4 +265,14 @@ def retrain(model, dataset, validate=True, device='cpu'):
     print("")
     print("Training complete!")
     print("Total training took {:} (h:mm:ss)".format(format_time(time.time()-total_t0)))
+
+    df_stats = pd.DataFrame(data=training_stats)
+    df_stats = df_stats.set_index('epoch')
+    plot_training_status(df_stats)
+
+    return model
+
+
+    
+    
             
