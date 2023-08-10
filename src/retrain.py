@@ -1,33 +1,31 @@
-
 import warnings
-warnings.filterwarnings('ignore')
-
-import os
 import config
 import utils
 
-import pandas as pd
 import numpy as np
 import random
 import torch
-from torch.utils.data import random_split, RandomSampler, SequentialSampler
-torch.manual_seed(42)
-
-from transformers import GPT2LMHeadModel,  GPT2LMHeadModel
-from transformers import AdamW, get_linear_schedule_with_warmup
 
 from datasets import GPT2Dataset
+from constants import (
+    CPU,
+    RUN, TYPE,
+    TEST, PRODUCTION
+)
 
-device = torch.device("cpu")
+torch.manual_seed(42)
+
+device = torch.device(CPU)
 seed_val = 42
 
 random.seed(seed_val)
 np.random.seed(seed_val)
 torch.manual_seed(seed_val)
 
+warnings.filterwarnings('ignore')
 
 cfg = config.read()
-run_type = cfg.get("run", "type")
+run_type = cfg.get(RUN, TYPE)
 
 notes = utils.get_sample_notes(run_type)
 
@@ -35,13 +33,16 @@ tokenizer = utils.get_tokenizer()
 dataset = GPT2Dataset(notes, tokenizer, max_length=768)
 
 # Split into training and validation sets
-
 configuration, model = utils.get_configuration_and_model()
 model.resize_token_embeddings(len(tokenizer))
-if run_type == "test":
-    utils.retrain(model, dataset)
-else:
-    utils.retrain(model, dataset, False)
+if run_type == TEST:
+    utils.retrain(model, dataset, tokenizer)
+elif run_type == PRODUCTION:
+    utils.retrain(model, dataset, tokenizer, False)
 
-import ipdb
-ipdb.set_trace()
+utils.save(model, tokenizer)
+
+version = utils.get_latest_version_of_saved_model()
+print(version)
+
+    
