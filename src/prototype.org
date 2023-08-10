@@ -1,0 +1,45 @@
+
+#+TITLE: Examples
+#+AUTHOR: Sreejith Sreekumar
+
+#+BEGIN_SRC ipython :session
+from transformers import pipeline, set_seed
+generator = pipeline('text-generation', model='gpt2')
+set_seed(42)
+#+END_SRC
+
+#+RESULTS:
+: # Out[5]:
+
+#+BEGIN_SRC ipython :session
+text = "Music to hear"
+generator(text, 
+          max_length=10, 
+          num_return_sequences=5)  
+#+END_SRC
+
+#+RESULTS:
+: # Out[6]:
+: #+BEGIN_EXAMPLE
+:   [{'generated_text': 'Music to hear more about our game. For everyone'},
+:   {'generated_text': 'Music to hear and choose from and try out and'},
+:   {'generated_text': 'Music to hear more about the new album from its'},
+:   {'generated_text': 'Music to hear a song from the song.\n'},
+:   {'generated_text': 'Music to hear the latest episode of "Muppet'}]
+: #+END_EXAMPLE
+
+
+#+BEGIN_SRC ipython :session
+import suggestions
+suggestions.get(text)
+#+END_SRC
+
+#+RESULTS:
+: # Out[7]:
+: #+BEGIN_EXAMPLE
+:   [{'generated_text': 'Music to hear, yet he live not,\n'},
+:   {'generated_text': 'Music to hear, a poet whose pen lives in'},
+:   {'generated_text': 'Music to hear and\n\nI can hear thee'},
+:   {'generated_text': 'Music to hear the voice of the sea,\n'},
+:   {'generated_text': 'Music to hear,\nO where are ye?'}]
+: #+END_EXAMPLE

@@ -9,8 +9,8 @@ from constants import (
 )
 
 cfg = config.read()
-max_length = cfg.get(SUGGESTIONS, MAX_LENGTH)
-num_return_seqs = cfg.get(SUGGESTIONS, NUM_RETURN_SEQUENCES)
+max_length = int(cfg.get(SUGGESTIONS, MAX_LENGTH))
+num_return_seqs = int(cfg.get(SUGGESTIONS, NUM_RETURN_SEQUENCES))
 generator = None
 
 
@@ -20,7 +20,7 @@ def get_generator():
     
     models_dir = cfg.get(MODEL, MODEL_SAVE_FOLDER)
     version = utils.get_latest_version_of_saved_model()
-    model_path = os.path.join(models_dir, version)
+    model_path = os.path.join(models_dir, str(version))
 
     print("Using retrained model version: ", str(version))
     
@@ -43,3 +43,7 @@ def get(text):
                      max_length=max_length,
                      num_return_sequences=num_return_seqs)
     
+
+
+
+#print(get("From fairest creatures"))
