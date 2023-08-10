@@ -31,14 +31,19 @@ cfg = config.read()
 def get_latest_version_of_saved_model():
 
     model_save_folder = cfg.get(MODEL, MODEL_SAVE_FOLDER)
-    existing_versions = os.listdir(model_save_folder)
 
-    if ".DS_Store" in existing_versions:
-        existing_versions.remove(".DS_Store")
+    if os.path.exists(model_save_folder):
+        existing_versions = os.listdir(model_save_folder)
 
-    if len(existing_versions) == 0:
-        return 0
-    return max([int(x) for x in existing_versions])
+        if ".DS_Store" in existing_versions:
+            existing_versions.remove(".DS_Store")
+
+        if len(existing_versions) == 0:
+            return 0
+
+        return max([int(x) for x in existing_versions])
+        
+    return 0
     
 
 def get_sample_notes(run_type):
@@ -189,7 +194,7 @@ def retrain(model, dataset, tokenizer_, validate=True, device='cpu'):
         validation_dataloader = DataLoader(
             val_dataset, # The validation samples.
             sampler=SequentialSampler(val_dataset), # Pull out batches sequentially.
-            batch_size = batch_size # Evaluate with this batch size.
+            batch_size=batch_size # Evaluate with this batch size.
         )
 
         total_steps = len(train_dataloader) * epochs

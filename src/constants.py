@@ -21,3 +21,7 @@ EPSILON = "epsilon"
 SAMPLE_EVERY = "sample_every"
 BATCH_SIZE = "batch_size"
 MODEL_SAVE_FOLDER = "model_save_dir"
+
+SUGGESTIONS = "suggestions"
+MAX_LENGTH = "max_length"
+NUM_RETURN_SEQUENCES = "num_return_sequences"
