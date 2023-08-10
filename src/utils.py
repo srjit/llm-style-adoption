@@ -111,7 +111,7 @@ def format_time(elapsed):
 def save(model, tokenizer_):
 
     version = get_latest_version_of_saved_model() + 1
-    output_dir = os.path.join(cfg.get(MODEL, MODEL_SAVE_FOLDER), version)
+    output_dir = os.path.join(cfg.get(MODEL, MODEL_SAVE_FOLDER), str(version))
 
     # Create output directory if needed
     if not os.path.exists(output_dir):
