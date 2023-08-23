@@ -1,5 +1,6 @@
 
 import configparser
+import os
 
 __author__ = "Sreejith Sreekumar"
 __email__ = "ssreejith@protonmail.com"
@@ -18,6 +19,7 @@ def read():
     global config
     if config is None:
         config = configparser.RawConfigParser()
-        config.read(config_file)
+        config.read(config.read(os.path.join(os.path.dirname(__file__), config_file)))
+                                
 
     return config

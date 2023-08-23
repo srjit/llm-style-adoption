@@ -28,6 +28,7 @@ from constants import (
 cfg = config.read()
 
 
+
 def get_latest_version_of_saved_model():
 
     model_save_folder = cfg.get(MODEL, MODEL_SAVE_FOLDER)

@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+import sys
+sys.path.append("~/code/therapy-note-generator/src/")
+
+import suggestions
 
 from transformers import pipeline, set_seed
 generator = pipeline('text-generation', model='gpt2')
@@ -30,6 +34,11 @@ def recommend(request):
     query = request.POST
     textarray = query.get("text").split("X2X2CF\n")[1:]
     note = "".join(textarray).replace("\xa0\n", "").strip()
+
+    print(">>>>>")
+    print(suggestions.get(note))
+
+    print(">>>>")
 
     suggestions = completions(note)
     print("*****************************************")

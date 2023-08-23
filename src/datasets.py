@@ -22,3 +22,4 @@ class GPT2Dataset(Dataset):
 
     def __getitem__(self, idx):
         return self.input_ids[idx], self.attn_masks[idx]
+ 

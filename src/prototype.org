@@ -3,13 +3,21 @@
 #+AUTHOR: Sreejith Sreekumar
 
 #+BEGIN_SRC ipython :session
+  import pandas as pd
+#+END_SRC
+
+#+RESULTS:
+: # Out[1]:
+
+#+BEGIN_SRC ipython :session
 from transformers import pipeline, set_seed
 generator = pipeline('text-generation', model='gpt2')
 set_seed(42)
 #+END_SRC
 
 #+RESULTS:
-: # Out[5]:
+: # Out[2]:
+: : Downloading:   0%|          | 0.00/548M [00:00<?, ?B/s]
 
 #+BEGIN_SRC ipython :session
 text = "Music to hear"
