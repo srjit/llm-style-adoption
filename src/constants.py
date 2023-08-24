@@ -7,9 +7,14 @@ PRODUCTION = "production"
 CPU = "cpu"
 
 DATA = "data"
+
 SAMPLE_DATA = "sonnet_f"
 SAMPLE_DATA_FOLDER = "sample_data_folder"
+
 NOTES_FOLDER = "notes_folder"
+USED_NOTES_FOLDER = "used_notes_folder"
+MAC_META_FILE = "../notes/.DS_Store"
+
 
 MODEL = "model"
 GPT2 = "gpt2"
