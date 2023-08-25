@@ -1,6 +1,8 @@
 import warnings
+
 import config
 import utils
+import network
 
 import numpy as np
 import random
@@ -28,8 +30,11 @@ warnings.filterwarnings('ignore')
 cfg = config.read()
 run_type = cfg.get(RUN, TYPE)
 
-#notes = utils.get_sample_notes(run_type)
-notes = suggestions.get_notes()
+notes = utils.get_sample_notes(run_type)
+#notes = suggestions.get_notes()
+
+import ipdb
+ipdb.set_trace()
 
 tokenizer = utils.get_tokenizer()
 dataset = GPT2Dataset(notes, tokenizer, max_length=768)
@@ -38,9 +43,9 @@ dataset = GPT2Dataset(notes, tokenizer, max_length=768)
 configuration, model = utils.get_configuration_and_model()
 model.resize_token_embeddings(len(tokenizer))
 if run_type == TEST:
-    utils.retrain(model, dataset, tokenizer)
+    network.retrain(model, dataset, tokenizer)
 elif run_type == PRODUCTION:
-    utils.retrain(model, dataset, tokenizer, False)
+    network.retrain(model, dataset, tokenizer, False)
 
 utils.save(model, tokenizer)
 

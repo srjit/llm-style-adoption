@@ -4,6 +4,7 @@ from transformers import pipeline
 from transformers import OpenAIGPTConfig, GPT2LMHeadModel
 from datasets import GPT2Dataset
 
+import network
 import config
 import utils
 from constants import (
@@ -27,12 +28,10 @@ def get_generator():
     model_path = os.path.join(models_dir, str(version))
 
     print("Using retrained model version: ", str(version))
-    
     generator = pipeline(task='text-generation',
                          model=model_path,
                          tokenizer=tokenizer,
                          framework='pt')
-    
     return generator
 
 
@@ -63,9 +62,10 @@ def get_previous_model_and_tokenizer():
     
 
 def get_notes():
+    
     texts = []
     notes_folder = cfg.get(DATA, NOTES_FOLDER)
-    
+
     if os.path.exists(notes_folder):
     
         notes = [os.path.join(notes_folder, txt) for txt
@@ -93,7 +93,7 @@ def retrain():
     import ipdb
     ipdb.set_trace()
     
-    utils.retrain(model, dataset, tokenizer, validate=True)
+    network.retrain(model, dataset, tokenizer, validate=True)
 
     utils.save(model, tokenizer)
     version = utils.get_latest_version_of_saved_model()
