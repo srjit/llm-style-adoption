@@ -33,9 +33,6 @@ run_type = cfg.get(RUN, TYPE)
 notes = utils.get_sample_notes(run_type)
 #notes = suggestions.get_notes()
 
-import ipdb
-ipdb.set_trace()
-
 tokenizer = utils.get_tokenizer()
 dataset = GPT2Dataset(notes, tokenizer, max_length=768)
 

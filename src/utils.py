@@ -5,7 +5,7 @@ import viz
 
 import random
 import torch
-from datetime import datetime, timedelta
+from datetime import datetime
 import config
 
 from transformers import GPT2LMHeadModel, \
@@ -97,9 +97,6 @@ def get_configuration_and_model():
     return configuration, model
 
 
-def format_time(elapsed):
-    return str(timedelta(seconds=int(round((elapsed)))))
-
 
 def save(model, tokenizer_):
 
@@ -119,35 +116,3 @@ def save(model, tokenizer_):
     model_to_save.save_pretrained(output_dir)
     tokenizer_.save_pretrained(output_dir)
 
-
-def plot_training_status(stats):
-
-    epochs = list(range(len(stats)))
-    
-    # Plot the learning curve.
-    f, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(8, 5))
-    viz.plot(epochs,
-             stats['Training Loss'],
-             ax=ax1,
-             ls="--",
-             format_y=False,
-             make_x_string=False,
-             color="gray",
-             label="Training")
-    viz.plot(epochs,
-             stats['Valid. Loss'], ax=ax1,
-             xlabel="Epoch",
-             ylabel="Loss",
-             format_y=False,
-             make_x_string=False,
-             ls='--',
-             color="k",
-             label="Validation")
-
-    # Label the plot.
-    plt.legend()
-
-    graphs_root_folder = "../plots"
-    fname = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    savepath = os.path.join(graphs_root_folder,  fname + ".png")
-    plt.savefig(savepath)

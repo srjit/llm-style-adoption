@@ -1,18 +1,26 @@
+import os
 import time
+from datetime import datetime, timedelta
+import pandas as pd
+import matplotlib.pyplot as plt
+import viz
 from transformers import AdamW, get_linear_schedule_with_warmup
 
 import config
+import torch
 from torch.utils.data import DataLoader, \
     random_split, RandomSampler, SequentialSampler
 from constants import (
     MODEL,
     EPOCHS, LEARNING_RATE, WARMUP_STEPS, EPSILON,
-    SAMPLE_EVERY, BATCH_SIZE
-    
+    SAMPLE_EVERY, BATCH_SIZE 
 )
     
-
 cfg = config.read()
+
+
+def format_time(elapsed):
+    return str(timedelta(seconds=int(round((elapsed)))))
 
 
 def retrain(model, dataset, tokenizer_, validate=True, device='cpu'):
@@ -27,13 +35,11 @@ def retrain(model, dataset, tokenizer_, validate=True, device='cpu'):
     optimizer = AdamW(model.parameters(),
                       lr=learning_rate,
                       eps=epsilon)
-    
     total_t0 = time.time()
     training_stats = []
     model = model.to(device)
 
-    train_dataloader = None
-    
+    train_dataloader = None  
     if validate:
 
         train_size = int(0.9 * len(dataset))
@@ -176,3 +182,36 @@ def retrain(model, dataset, tokenizer_, validate=True, device='cpu'):
     plot_training_status(df_stats)
 
     return model
+
+
+def plot_training_status(stats):
+
+    epochs = list(range(len(stats)))
+    
+    # Plot the learning curve.
+    f, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(8, 5))
+    viz.plot(epochs,
+             stats['Training Loss'],
+             ax=ax1,
+             ls="--",
+             format_y=False,
+             make_x_string=False,
+             color="gray",
+             label="Training")
+    viz.plot(epochs,
+             stats['Valid. Loss'], ax=ax1,
+             xlabel="Epoch",
+             ylabel="Loss",
+             format_y=False,
+             make_x_string=False,
+             ls='--',
+             color="k",
+             label="Validation")
+
+    # Label the plot.
+    plt.legend()
+
+    graphs_root_folder = "../plots"
+    fname = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    savepath = os.path.join(graphs_root_folder,  fname + ".png")
+    plt.savefig(savepath)
