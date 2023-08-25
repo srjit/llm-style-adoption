@@ -37,7 +37,7 @@ tokenizer = utils.get_tokenizer()
 dataset = GPT2Dataset(notes, tokenizer, max_length=768)
 
 # Split into training and validation sets
-configuration, model = utils.get_configuration_and_model()
+configuration, model = utils.get_configuration_and_default_model()
 model.resize_token_embeddings(len(tokenizer))
 if run_type == TEST:
     network.retrain(model, dataset, tokenizer)
@@ -48,5 +48,3 @@ utils.save(model, tokenizer)
 
 version = utils.get_latest_version_of_saved_model()
 print(version)
-
-    

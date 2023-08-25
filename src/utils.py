@@ -82,7 +82,7 @@ def get_tokenizer():
     return tokenizer
 
 
-def get_configuration_and_model():
+def get_configuration_and_default_model():
 
     model_type = cfg.get(MODEL, TYPE)
     configuration, model = None, None

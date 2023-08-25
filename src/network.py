@@ -1,5 +1,6 @@
 import os
 import time
+import random
 from datetime import datetime, timedelta
 import pandas as pd
 import matplotlib.pyplot as plt
