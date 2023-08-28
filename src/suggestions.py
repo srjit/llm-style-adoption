@@ -18,6 +18,11 @@ from constants import (
     MAC_META_FILE
 )
 
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
+
 cfg = config.read()
 max_length = int(cfg.get(SUGGESTIONS, MAX_LENGTH))
 num_return_seqs = int(cfg.get(SUGGESTIONS, NUM_RETURN_SEQUENCES))
@@ -69,7 +74,7 @@ def move_trained_notes(source):
 
     destination = cfg.get(DATA, USED_NOTES_FOLDER)
     files = glob.glob(os.path.join(source), recursive=True)
-    logging.info("Moving trained notes to destination")
+    logger.info("Moving trained notes to destination")
 
     for file_path in files:
         dst_path = os.path.join(destination, os.path.basename(file_path))
@@ -109,5 +114,5 @@ def retrain(notes_path=''):
     network.retrain(model, dataset, tokenizer, validate=True)
     utils.save(model, tokenizer)
     version = utils.get_latest_version_of_saved_model()
-    logging.info(f"Retrained and saved new model with {version}")
+    logger.info(f"Retrained and saved new model with {version}")
     move_trained_notes(notes_path)

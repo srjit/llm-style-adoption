@@ -13,8 +13,8 @@ async def get_suggestions(text: str):
     return {"suggestions": generated}
 
 
-@app.get("/retrain/{notes_path:str}")
-async def retrain(notes_path):
+@app.get("/retrain/{notes_path:path}")
+async def retrain(notes_path: str):
 
     print(f"Retraining with new notes : {notes_path}")
     suggestions.retrain(notes_path)
