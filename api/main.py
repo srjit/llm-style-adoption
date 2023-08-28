@@ -7,9 +7,11 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-@app.get("/suggestions/{text:str}")
+@app.get("/get_suggestions/{text:str}")
 async def get_suggestions(text: str):
     generated = suggestions.get(text)
     return {"suggestions": generated}
 
 
+@app.get("/retrain/{notes_path:str}")
+async def retrain()
