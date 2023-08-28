@@ -1,4 +1,8 @@
+import logging
+
 import os
+import glob
+import shutil
 import pandas as pd
 from transformers import pipeline
 from transformers import OpenAIGPTConfig, GPT2LMHeadModel
@@ -61,16 +65,30 @@ def get_previous_model_and_tokenizer():
     return model, tokenizer
     
 
-def get_notes():
+def move_trained_notes(source):
+
+    destination = cfg.get(DATA, USED_NOTES_FOLDER)
+    files = glob.glob(os.path.join(source), recursive=True)
+    logging.info("Moving trained notes to destination")
+
+    for file_path in files:
+        dst_path = os.path.join(destination, os.path.basename(file_path))
+        shutil.move(file_path, dst_path)
+        print(f"Moved {file_path}")
+    
+    
+
+def get_notes(path):
     
     texts = []
-    notes_folder = cfg.get(DATA, NOTES_FOLDER)
 
-    if os.path.exists(notes_folder):
-    
-        notes = [os.path.join(notes_folder, txt) for txt
-                 in os.listdir(notes_folder)]
+    if path == "":
+        path = cfg.get(DATA, NOTES_FOLDER)
 
+    if os.path.exists(path):
+
+        notes = [os.path.join(path, txt) for txt
+                 in os.listdir(path)]
         if MAC_META_FILE in notes:
             notes.remove(MAC_META_FILE)
 
@@ -83,18 +101,13 @@ def get_notes():
     return texts
 
 
-def retrain():
+def retrain(notes_path=''):
 
-    notes = get_notes()
-
+    notes = get_notes(notes_path)
     model, tokenizer = get_previous_model_and_tokenizer()
     dataset = GPT2Dataset(notes, tokenizer, max_length=768)
-
-    import ipdb
-    ipdb.set_trace()
-    
     network.retrain(model, dataset, tokenizer, validate=True)
-
     utils.save(model, tokenizer)
     version = utils.get_latest_version_of_saved_model()
-    print(f"Retrained and saved new model with {version}")
+    logging.info(f"Retrained and saved new model with {version}")
+    move_trained_notes(notes_path)

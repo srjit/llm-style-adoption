@@ -7,7 +7,6 @@ import network
 import numpy as np
 import random
 import torch
-import suggestions
 
 from datasets import GPT2Dataset
 from constants import (
@@ -17,10 +16,8 @@ from constants import (
 )
 
 torch.manual_seed(42)
-
 device = torch.device(CPU)
 seed_val = 42
-
 random.seed(seed_val)
 np.random.seed(seed_val)
 torch.manual_seed(seed_val)
@@ -38,6 +35,8 @@ dataset = GPT2Dataset(notes, tokenizer, max_length=768)
 
 # Split into training and validation sets
 configuration, model = utils.get_configuration_and_default_model()
+
+print("Starting retraining of GPT2 model...")
 model.resize_token_embeddings(len(tokenizer))
 if run_type == TEST:
     network.retrain(model, dataset, tokenizer)
@@ -47,4 +46,4 @@ elif run_type == PRODUCTION:
 utils.save(model, tokenizer)
 
 version = utils.get_latest_version_of_saved_model()
-print(version)
+print("Latest version of the saved model: {version}")

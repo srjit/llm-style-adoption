@@ -14,4 +14,7 @@ async def get_suggestions(text: str):
 
 
 @app.get("/retrain/{notes_path:str}")
-async def retrain()
+async def retrain(notes_path):
+
+    print(f"Retraining with new notes : {notes_path}")
+    suggestions.retrain(notes_path)
