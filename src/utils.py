@@ -1,4 +1,5 @@
 import os
+import logging
 import pandas as pd
 import matplotlib.pyplot as plt
 import viz
@@ -50,12 +51,12 @@ def get_sample_notes(run_type):
     if run_type == TEST:
         with open(sonnet_f) as f:
             txt = f.read()
+        sonnets = txt.split("\n\n")[:100]
+        # for i, sonnet in enumerate(sonnets):
+        #     with open(notes_directory + "/" + str(i) + ".txt", "w") as f:
+                # f.write(sonnet)
 
-        sonnets = txt.split("\n\n")
-        for i, sonnet in enumerate(sonnets):
-            with open(notes_directory + "/" + str(i) + ".txt", "w") as f:
-                f.write(sonnet)
-
+        print(f"Number of notes for training: {len(sonnets)}")
         df = pd.DataFrame(sonnets)[2:]
         df.columns = ["note"]
         df.dropna(inplace=True)
