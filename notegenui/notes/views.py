@@ -1,49 +1,53 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import requests
-
-from transformers import pipeline, set_seed
-generator = pipeline('text-generation', model='gpt2')
-set_seed(42)
+from urllib.parse import urljoin
 
 
-def completions(text, max_len=5, num_seq=5):
-
-    _suggestions = generator(text,
-                             max_length=max_len,
-                             num_return_sequences=num_seq)
-    suggestions = [x["generated_text"] for x in _suggestions]
-    return suggestions
-
+API_SERVER = settings.API_SERVER
 
 
 # Create your views here.
 def index(request):
-    # return render(request, "editor.html")
     return render(request, "dashboard.html")
 
 
 @csrf_exempt
 def recommend(request):
 
-    url = 'http://127.0.0.1:8000/get_suggestions/'
+    api_url = urljoin(API_SERVER, 'get_suggestions')
+    
     query = request.POST
     textarray = query.get("text").split("X2X2CF\n")[1:]
     writing = "".join(textarray).replace("\xa0\n", "").strip()
-
-    print("****************")
-    print(writing)
-    print("****************")
-    
     query = {'text': writing}
-    response = requests.get(url,
+    response = requests.get(api_url,
                             params=query)
     suggestions_d = dict(response.json())['suggestions']
     suggestions = [x['generated_text'] for x in suggestions_d]
-    print("-----------")
-    print(suggestions)
-    print("-----------")
+
     return HttpResponse(json.dumps({"suggestions": suggestions}),
+                        content_type="application/json")
+
+
+
+@csrf_exempt
+def retrain(request):
+
+    query = request.POST
+    path = query.get("path")
+    api_url = urljoin(API_SERVER, 'retrain')
+    query = {'notes_path': path}
+    response = requests.get(api_url,
+                            params=query)
+    print("retrained...")
+    print(API_SERVER)
+
+    # url = 'http://127.0.0.1:8000/retrain/'
+    
+    
+    return HttpResponse(json.dumps({"status": "OK"}),
                         content_type="application/json")

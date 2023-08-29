@@ -26,7 +26,6 @@
                       'text': elm,
                   },
                   success: function(response) {
-                      // console.log(response);
                       showResults(response.suggestions);
                   },
                   error: function(error) {
@@ -37,9 +36,7 @@
 
       function showResults(suggestions) {
 
-          // console.log(suggestions);
-          
-          res = document.getElementById("result");
+           res = document.getElementById("result");
           res.innerHTML = '';
           let list = '';
           for (i=0; i< suggestions.length; i++) {

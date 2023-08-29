@@ -59,7 +59,7 @@
 		  <h1><a href="index.html" class="logo">Lia.ai</a></h1>
 	      <ul class="list-unstyled components mb-5">
 	        <li class="active">
-              <a onclick="editor()">Editor</a>
+              <a href="#" onclick="editor()">Editor</a>
 	        </li>
 	        <li>
 	          <a href="#" onclick="retrain()">Retrain</a>
@@ -68,7 +68,7 @@
               <a  href="#" onclick="contact()">Contact</a>
 	        </li>
 	      </ul>
-	      <div  href="#" class="footer">
+	      <div  class="footer">
 	        <p>
 			  Copyright &copy;<script>document.write(new Date().getFullYear());</script>
               All rights reserved
@@ -102,7 +102,7 @@
             </tr>
             <tr>
               <td></td>
-              <td><button name="subject" type="submit" value="HTML">Retrain</button></td>
+              <td><button id="retrain" type="submit" value="HTML">Retrain</button></td>
             </tr>
           </table>
         </div>
@@ -120,6 +120,26 @@
           $('#note-editor').hide()
           $('#retrain-ui').show()
       }
+      
+    $("#retrain").click(function(){
+        path = $('#path').val();
+        if (path == ""){
+              alert("Please add a path");
+          }
+          else{
+              $.ajax({url:'retrain/',
+                     type:'POST',
+                     data: { "path": path},
+                     success: function (response) {
+              //            alert(response.status);
+                     },
+                     error: function (xhr, type, error) {
+              //            alert("error");
+                     }
+                     });
+          }
+    }); 
+      
     </script>
   </body>
 </html>
