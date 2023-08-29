@@ -21,7 +21,8 @@ def completions(text, max_len=5, num_seq=5):
 
 # Create your views here.
 def index(request):
-    return render(request, "editor.html")
+    # return render(request, "editor.html")
+    return render(request, "dashboard.html")
 
 
 @csrf_exempt
@@ -31,6 +32,11 @@ def recommend(request):
     query = request.POST
     textarray = query.get("text").split("X2X2CF\n")[1:]
     writing = "".join(textarray).replace("\xa0\n", "").strip()
+
+    print("****************")
+    print(writing)
+    print("****************")
+    
     query = {'text': writing}
     response = requests.get(url,
                             params=query)

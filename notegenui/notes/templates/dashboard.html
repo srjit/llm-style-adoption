@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    {% include "includes.html" %}
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script>
+  window.onload = function () {  
+      document.addEventListener('keyup', event => {
+          if (event.code === 'Space') {
+              res = document.getElementById("result");
+              res.innerHTML = '';
+
+              elm = document.getElementById('yseditor').textContent
+              textarray = elm.split("X2X2CF")
+
+              $.ajax({
+                  url: '/notes/recommend/',
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                      'text': elm,
+                  },
+                  success: function(response) {
+                      showResults(response.suggestions);
+                  },
+                  error: function(error) {
+                  }
+              });
+          }
+      })
+
+      function showResults(suggestions) {
+
+          res = document.getElementById("result");
+          res.innerHTML = '';
+          let list = '';
+          for (i=0; i< suggestions.length; i++) {
+              list += '<li>' + suggestions[i] + '</li>';
+          }
+          res.innerHTML = '<ul>' + list + '</ul>';
+      }
+  }
+  </script>
+  </head>
+  <body>
+	
+	<div class="wrapper d-flex align-items-stretch">
+	  <nav id="sidebar">
+		<div class="custom-menu">
+		  <button type="button" id="sidebarCollapse" class="btn btn-primary">
+	        <i class="fa fa-bars"></i>
+	        <span class="sr-only">Toggle Menu</span>
+	      </button>
+        </div>
+		<div class="p-4 pt-5">
+		  <h1><a href="index.html" class="logo">Lia.ai</a></h1>
+	      <ul class="list-unstyled components mb-5">
+	        <li class="active">
+              <a onclick="editor()">Editor</a>
+	        </li>
+	        <li>
+	          <a href="#" onclick="retrain()">Retrain</a>
+	        </li>
+            <li>
+              <a  href="#" onclick="contact()">Contact</a>
+	        </li>
+	      </ul>
+	      <div  href="#" class="footer">
+	        <p>
+			  Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+              All rights reserved
+            </p>
+	      </div>
+
+	    </div>
+      </nav>
+
+      <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5 pt-5">
+
+        <div id='note-editor'>
+          <h2 class="mb-4">Editor</h2>
+            <div id="yseditor">
+              <p>Write text here...<div id="result"></div></p>
+            </div>
+        </div>
+
+        
+        <div id='retrain-ui' style="display: none;">
+          <table>
+            <tr></tr>
+            <tr>
+              <td style="padding-top: 15px; padding-right: 15px;">
+                <p> Provide path of notes </p>
+              </td>
+              <td>
+                <input type="text" id="path" name="path" size="50"/>
+               </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><button name="subject" type="submit" value="HTML">Retrain</button></td>
+            </tr>
+          </table>
+        </div>
+        
+      </div>
+      
+	</div>
+    <script>
+      var myEditor = new ysEditor();
+      function editor(){
+          $('#retrain-ui').hide()
+          $('#note-editor').show()
+      }
+      function retrain(){
+          $('#note-editor').hide()
+          $('#retrain-ui').show()
+      }
+    </script>
+  </body>
+</html>
