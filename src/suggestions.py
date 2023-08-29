@@ -108,11 +108,15 @@ def get_notes(path):
 
 def retrain(notes_path=''):
 
-    notes = get_notes(notes_path)
-    model, tokenizer = get_previous_model_and_tokenizer()
-    dataset = GPT2Dataset(notes, tokenizer, max_length=768)
-    network.retrain(model, dataset, tokenizer, validate=True)
-    utils.save(model, tokenizer)
-    version = utils.get_latest_version_of_saved_model()
-    logger.info(f"Retrained and saved new model with {version}")
-    move_trained_notes(notes_path)
+    try:
+        notes = get_notes(notes_path)
+        model, tokenizer = get_previous_model_and_tokenizer()
+        dataset = GPT2Dataset(notes, tokenizer, max_length=768)
+        network.retrain(model, dataset, tokenizer, validate=True)
+        utils.save(model, tokenizer)
+        version = utils.get_latest_version_of_saved_model()
+        logger.info(f"Retrained and saved new model with {version}")
+        move_trained_notes(notes_path)
+        return "OK"
+    except:
+        return "Failed"

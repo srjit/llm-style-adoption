@@ -18,8 +18,11 @@ def index(request):
 @csrf_exempt
 def recommend(request):
 
+    """
+    Returns a list of recommendations for a given text
+    """
     api_url = urljoin(API_SERVER, 'get_suggestions')
-    
+
     query = request.POST
     textarray = query.get("text").split("X2X2CF\n")[1:]
     writing = "".join(textarray).replace("\xa0\n", "").strip()
@@ -33,21 +36,17 @@ def recommend(request):
                         content_type="application/json")
 
 
-
 @csrf_exempt
 def retrain(request):
+    """
+    Build an updated version of the autocomplete model
 
+    """
     query = request.POST
     path = query.get("path")
     api_url = urljoin(API_SERVER, 'retrain')
     query = {'notes_path': path}
     response = requests.get(api_url,
                             params=query)
-    print("retrained...")
-    print(API_SERVER)
-
-    # url = 'http://127.0.0.1:8000/retrain/'
-    
-    
-    return HttpResponse(json.dumps({"status": "OK"}),
+    return HttpResponse(json.dumps({"status": response}),
                         content_type="application/json")

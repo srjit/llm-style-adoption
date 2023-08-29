@@ -106,6 +106,10 @@
             </tr>
           </table>
         </div>
+
+        <div id='contact-ui' style="display: none;">
+          Support Mail : ssreejith@protonmail.com
+        <div>
         
       </div>
       
@@ -114,11 +118,19 @@
       var myEditor = new ysEditor();
       function editor(){
           $('#retrain-ui').hide()
+          $('#contact-ui').hide()
           $('#note-editor').show()
       }
       function retrain(){
           $('#note-editor').hide()
+          $('#contact-ui').hide()
           $('#retrain-ui').show()
+      }
+      function contact(){
+          $('#note-editor').hide()
+          $('#retrain-ui').hide()          
+          $('#contact-ui').show()
+          
       }
       
     $("#retrain").click(function(){
@@ -131,10 +143,10 @@
                      type:'POST',
                      data: { "path": path},
                      success: function (response) {
-              //            alert(response.status);
+                         alert("Retrain Status: " + response.status);
                      },
                      error: function (xhr, type, error) {
-              //            alert("error");
+                         alert("Error occured while retraining!");
                      }
                      });
           }
