@@ -1,7 +1,6 @@
 
-## Fylgja
+## llm-style-adoption
 
-Fylgia (pronounced [Fuul-ya](https://en.wikipedia.org/wiki/Fylgja)) is a project that consists of multiple elements.
 
 1. A python package which contains a large language model that can adopt to your
 style of writing
